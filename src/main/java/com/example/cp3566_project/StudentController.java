@@ -1,29 +1,33 @@
 package com.example.cp3566_project;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path="/student")
+@RequestMapping(path="/api/student")
 public class StudentController {
 
     @Autowired
     private StudentRepository repository;
 
-    @PostMapping(path="/api/addStudent")
-    public Student addStudent(@RequestBody Student student) {
-        return repository.save(student);
+    @PostMapping(path="/add")
+    public ResponseEntity<Student> addStudent(@RequestBody Student student) {
+        Student savedStudent = repository.save(student);
+        return ResponseEntity.ok(savedStudent);
     }
 
-    @GetMapping(path="/api/getStudents")
-    public Iterable<Student> getAllStudents() {
-        return repository.findAll();
+    @GetMapping(path="/getAll")
+    public ResponseEntity<Iterable<Student>> getAllStudents() {
+        Iterable<Student> students = repository.findAll();
+        return ResponseEntity.ok(students);
     }
 
-    @GetMapping(path="/api/getStudents/{id}")
-    public Optional<Student> getStudentById(@PathVariable Long id) {
-        return repository.findById(id);
+    @GetMapping(path="/get/{id}")
+    public ResponseEntity<Optional<Student>> getStudentById(@PathVariable Long id) {
+        Optional<Student> student = repository.findById(id);
+        return ResponseEntity.of(Optional.of(student));
     }
 }

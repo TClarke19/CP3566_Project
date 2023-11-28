@@ -1,6 +1,8 @@
 package com.example.cp3566_project;
 
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -12,18 +14,21 @@ public class CourseController {
     @Autowired
     private CourseRepository repository;
 
-    @PostMapping("/api/addCourse")
-    public Course addCourse(@RequestBody Course course) {
-        return repository.save(course);
+    @PostMapping("/add")
+    public ResponseEntity<Course> addCourse(@RequestBody Course course) {
+        Course savedCourse = repository.save(course);
+        return ResponseEntity.ok(savedCourse);
     }
 
-    @GetMapping("/api/getCourses")
-    public Iterable<Course> getAllCourses() {
-        return repository.findAll();
+    @GetMapping("/getAll")
+    public ResponseEntity<Iterable<Course>> getAllCourses() {
+        Iterable<Course> courses = repository.findAll();
+        return ResponseEntity.ok(courses);
     }
 
-    @GetMapping("/api/getCourses/{id}")
-    public Optional<Course> getCourseById(@PathVariable Long id) {
-        return repository.findById(id);
+    @GetMapping("/get/{id}")
+    public ResponseEntity<Optional<Course>> getCourseById(@PathVariable Long id) {
+        Optional<Course> course = repository.findById(id);
+        return ResponseEntity.of(Optional.of(course));
     }
 }
