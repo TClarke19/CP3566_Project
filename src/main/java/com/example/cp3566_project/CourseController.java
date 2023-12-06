@@ -38,7 +38,6 @@ public class CourseController {
             Course existingCourse = optionalCourse.get();
             existingCourse.setCourseName(course.getCourseName());
             existingCourse.setCourseNumber(course.getCourseNumber());
-            // set other fields...
             repository.save(existingCourse);
             return ResponseEntity.ok(existingCourse);
         } else {
