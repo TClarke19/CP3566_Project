@@ -30,4 +30,25 @@ public class CourseController {
         Optional<Course> course = repository.findById(id);
         return ResponseEntity.of(Optional.of(course));
     }
+
+    @PutMapping("/modify/{id}")
+    public ResponseEntity<Course> modifyCourse(@PathVariable Long id, @RequestBody Course course) {
+        Optional<Course> optionalCourse = repository.findById(id);
+        if (optionalCourse.isPresent()) {
+            Course existingCourse = optionalCourse.get();
+            existingCourse.setCourseName(course.getCourseName());
+            existingCourse.setCourseNumber(course.getCourseNumber());
+            // set other fields...
+            repository.save(existingCourse);
+            return ResponseEntity.ok(existingCourse);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteCourse(@PathVariable Long id) {
+        repository.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 }

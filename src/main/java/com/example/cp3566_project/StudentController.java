@@ -30,4 +30,29 @@ public class StudentController {
         Optional<Student> student = repository.findById(id);
         return ResponseEntity.of(Optional.of(student));
     }
+
+    @PutMapping(path="/modify/{id}")
+    public ResponseEntity<Student> modifyStudent(@PathVariable Long id, @RequestBody Student student) {
+        Optional<Student> optionalStudent = repository.findById(id);
+        if (optionalStudent.isPresent()) {
+            Student existingStudent = optionalStudent.get();
+            existingStudent.setFirstName(student.getFirstName());
+            existingStudent.setLastName(student.getLastName());
+            existingStudent.setEmail(student.getEmail());
+            existingStudent.setAddress(student.getAddress());
+            existingStudent.setCity(student.getCity());
+            existingStudent.setPostal(student.getPostal());
+            existingStudent.setPhone(student.getPhone());
+            repository.save(existingStudent);
+            return ResponseEntity.ok(existingStudent);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping(path="/delete/{id}")
+    public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
+        repository.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 }
